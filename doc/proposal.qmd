@@ -35,7 +35,7 @@ The topic that I will be covering for my capstone project is Housing affordabili
 
   * Gross Rent: Count of household rent that falls into a certain range (USD). $500 bin size
 
-  * Owner Costs: Count of ownsership costs that fall into a certain range (USD). $500 bin size
+  * Owner Costs: Count of ownership costs that fall into a certain range (USD). $500 bin size
 
   * Owner housing units without mortgage
 
@@ -64,7 +64,7 @@ that are paying 35% or less of their monthly income in rent. Then I will compare
 
 3. Which neighborhood should someone live in based on their housing budget? To answer this I would like to make a dashboard that has the neighborhoods of Seattle on the map as cells that can be colored in. The reader will select a desired rent range then a heatmap will be generated. The colors will correspond to the concentration of homes in that neighborhood that are in budget. The reader could also select between rent and ownership costs.
 
-4. Is Owning or Renting more affordable in Seattle? This will follow a similar process to Question 1 however the cutoff for affordable will be below 25% instead of 35%. Chase Bank reccomends mortgage payments should be no more than 28% of your income, so I will say 25% and below is 'affordable'. 
+4. Is Owning or Renting more affordable in Seattle? This will follow a similar process to Question 1 however the cutoff for affordable will be below 25% instead of 35%. Chase Bank recommends mortgage payments should be no more than 28% of your income, so I will say 25% and below is 'affordable'.
 
 5. Does higher income lead to housing becoming more affordable? I would like to use the income data to compare the income levels of each neighborhood to the rate of households living in affordable homes. Is lifestyle creep a factor? If so, at what point does it stop being a factor? I will answer this question by first calculating the mean household income per neighborhood. Then, I will create a scatter plot with mean income on the x axis and affordability proportion on the y axis. Finally, I will apply a line of best fit so the reader can visualize the overall trend in the data.
 
@@ -85,7 +85,7 @@ that are paying 35% or less of their monthly income in rent. Then I will compare
 
 * Question 2 (2 Hours)
 
-* Quetion 4 (2 Hours)
+* Question 4 (2 Hours)
 
 * Dashboard Layout Planning (3 Hours)
 
