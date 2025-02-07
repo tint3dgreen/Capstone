@@ -1,7 +1,7 @@
 ---
-title: "Proposal: [Your project name]"
+title: "Proposal: Rent Prices in Seattle"
 subtitle: "DATA 450 Capstone"
-author: "[Your Name]"
+author: "Colin Arscott"
 date: today
 date-format: long
 bibliography: references.bib
@@ -13,74 +13,95 @@ jupyter: python3
 
 # Introduction
 
-[This section should contain background and introduction to your general topic.]
+The topic that I will be covering for my capstone project is Housing affordability in the city of Seattle WA. At some point in everyone's life, they will need to research places to live. My goal for this project is to make that process easy by creating a housing cost dashboard that breaks down housing costs in the city of Seattle by neighborhood. There will be two primary datasets that I will be using. Housing Tenure and Costs- Seattle Neighborhoods, and Incomes Occupations and Earnings - Seattle Neighborhoods. I will use these datasets to compare the costs of renting vs owning in Seattle on a neighborhood by neighborhood basis. I will also show how affordable each neighborhood is to the people who live there by using the income data.
 
 # Dataset
 
-[In this section, desribe the dataset(s). This includes things like where you
-obtained the dataset. Include a full citation, as specified 
-[here](https://guides.lib.umich.edu/c.php?g=282964&p=3285995). Describe how the
-data was obtained by the data owner/curator, as best as you can. List the 
-variables that you plan to use in your analysis, for example:
 
-* weight: The patient's weight (kg)
-* sex: The patient's sex, male or female
-* age: The patient's age (months)
+  City of Seattle. (n.d.). Housing Tenure and Costs - Seattle Neighborhoods [Dataset] @sea24. https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::housing-tenure-and-costs-seattle-neighborhoods
 
-]
+  This dataset is data from the American Community Survey that is compiled and published by the city of Seattle WA. 
+  The variables that I am interested in using are:
+
+  * Neighborhood Name
+
+  * Occupied Housing Units: The number of housing units that are occupied
+
+  * Owner Households: Count of households that own the home
+
+  * Renter Households: Count of households that pay rent
+
+  * Gross Rent as a Percentage of Household Income xx to yy%: Count of renters whose rent falls into a certain range of their household income. Separated into 5% bins
+
+  * Gross Rent: Count of household rent that falls into a certain range (USD). $500 bin size
+
+  * Owner Costs: Count of ownsership costs that fall into a certain range (USD). $500 bin size
+
+  * Owner housing units without mortgage
+
+
+  City of Seattle. (n.d.-b). Incomes Occupations and Earnings - Seattle Neighborhoods [Dataset] @seai24. https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::incomes-occupations-and-earnings-seattle-neighborhoods/explore
+  
+  * Household Income: Count of the income levels of neighborhood households.
+
+  * Aggregate 12 Month income: Income(USD) of entire neighborhood
+
+  * Total Households: Total number of households in neighborhood
+
 
 # Data Acquisition and Processing
 
-[In this section, if applicable, describe how you will obtain the data (if it's
-anything more complicated than a simple download). Discuss what data 
-processing steps will be needed, such as recoding variables, data cleaning,
-data tidying, imputing missing values, etc. See sections 1c, 1d, 1e in the 
-"Good Enough Practices" paper.]
+The data is in a usable state and will not require any cleaning.
 
 # Research Questions and Methodology
 
-[In this section, list each of the questions you will explore. Following each
-question, provide a detailed and specific plan for how you plan to answer the 
-question. Include the specific steps you will take, what form the answer will 
-take (a number? table? visualization? model? Give all the specifics), and 
-estimate how many hours each question will take to complete.]
 
-1. Is smoking correlated with diabetes? To answer this, I will create a filled
-bar plot, with the left bar representing non-smokers, the middle bar
-representing people who smoke moderately, and the right bar representing heavy
-smokers. The bars will be the same height, and each bar will be
-colored two colors based on the proportion of patients in the group who do or
-do not have diabetes.
+1. Which neighborhoods are the most affordable for renters in Seattle? To answer this I will combine columns in a neighborhood to find the number of households in each neighborhood
+that are paying 35% or less of their monthly income in rent. Then I will compare this to the total number of households that are renting in the neighborhood to find the percentage of households that are paying an affordable ammount for rent. I will rank the neighborhoods in descending order and display the results in a bar plot. The result will show which neighborhoods have the highest proportion of residents that have an affordable rent cost.
 
-2. Question 2? Plan for question 2.
 
-3. Question 3? Plan for question 3.
+2. Overall is renting or owning more popular? Are there any neighborhoods that deviate from the city-wide choice? To find the answer, I will find the sum of the number of renting households as well as the sum of the number of owning households. I will compare these to find the proportion of renting to owning in the city. Then I will perform this calculation on each neighborhood and create a sorted bar chart. I would like to add a horizontal dashed line to denote the city-wide preference. 
 
-4. etc.
+3. Which neighborhood should someone live in based on their housing budget? To answer this I would like to make a dashboard that has the neighborhoods of Seattle on the map as cells that can be colored in. The reader will select a desired rent range then a heatmap will be generated. The colors will correspond to the concentration of homes in that neighborhood that are in budget. The reader could also select between rent and ownership costs.
+
+4. Is Owning or Renting more affordable in Seattle? This will follow a similar process to Question 1 however the cutoff for affordable will be below 25% instead of 35%. Chase Bank reccomends mortgage payments should be no more than 28% of your income, so I will say 25% and below is 'affordable'. 
+
+5. Does higher income lead to housing becoming more affordable? I would like to use the income data to compare the income levels of each neighborhood to the rate of households living in affordable homes. Is lifestyle creep a factor? If so, at what point does it stop being a factor? I will answer this question by first calculating the mean household income per neighborhood. Then, I will create a scatter plot with mean income on the x axis and affordability proportion on the y axis. Finally, I will apply a line of best fit so the reader can visualize the overall trend in the data.
 
 # Work plan
 
-[Fill in the list below with a plan for what you will do each week, starting 2/10. You should
-have around 7 hours worth of work each week. Writing work counts. Several tasks
-have already been filled in for you.]
 
-**Week 4 (2/10 - 2/16):** [Just an example: 
+**Week 4 (2/10 - 2/16):** 
 
-* Data tidying and recoding (4 hours)
-* Question 2 (4 hours).]
+* Research Dashboard Techniques - (2 Hours)
+
+* Question 1 (4 Hours)
 
 **Week 5 (2/17 - 2/23):**
 
+* Render Dashboard with map of Seattle Neighborhoods (7 Hours)
+
 **Week 6 (2/24 - 3/2):**
 
+* Question 2 (2 Hours)
+
+* Quetion 4 (2 Hours)
+
+* Dashboard Layout Planning (3 Hours)
+
 **Week 7 (3/3 - 3/9):**
+
+* Dashboard implementation (3 Hours)
 
 * Presentation prep and practice (4 hours)
 
 **Week 8 (3/10 - 3/16):** *Presentations given on Wed-Thu 3/12-3/13.*
 
 * Poster prep (4 hours)
+
 * Presentation peer review (1.5 hours)
+
+* Polish Visualizations (1.5 hours)
 
 **Week 9 (3/24 - 3/30):** *Poster Draft 1 due Monday morning 3/24 at 9am. Poster Draft 2 due Sunday night 3/30.*
 
@@ -92,17 +113,27 @@ have already been filled in for you.]
 
 * Peer feedback (1.5 hours)
 
+* Dashboard (3 hours)
+
 * Poster revisions (2 hours)
 
 **Week 11 (4/7 - 4/13):**
 
+* Question 5 (3 Hours)
+
+* Dashboard (3 Hours)
+
 **Week 12 (4/14 - 4/20):**
+
+* Begin Blog Post Draft (4 hours)
 
 **Week 13 (4/21 - 4/27):** *Blog post draft 1 due Sunday night 4/28.*
 [All project work should be done by the end of this 
 week. The remaining time will be used for writing up and presenting your results.]
 
 * Draft blog post (4 hours).
+
+* Finalize dashboard (4 hours)
 
 **Week 14 (4/28 - 5/4):**
 
@@ -115,37 +146,6 @@ week. The remaining time will be used for writing up and presenting your results
 * Blog post revisions (2 hours)
 * Peer feedback (2 hours)
 * [Do not schedule any other tasks for this week.]
-
-## Some cool Quarto stuff
-
-[You can delete this section from your proposal.]
-
-For your reference, here's an example of a Python code cell in Quarto,
-along with a figure that gets generated, along with a caption and a label
-so that it can be referred to automatically as "Figure 1" (or whatever)
-in the writeup.
-
-For a demonstration of a line plot on a polar axis, see @fig-polar.
-
-```{python}
-#| label: fig-polar
-#| fig-cap: "A line plot on a polar axis"
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-r = np.arange(0, 2, 0.01)
-theta = 2 * np.pi * r
-fig, ax = plt.subplots(
-  subplot_kw = {'projection': 'polar'} 
-)
-ax.plot(theta, r)
-ax.set_rticks([0.5, 1, 1.5, 2])
-ax.grid(True)
-plt.show()
-```
-
-Here's an example of citing a source [see @phil99, pp. 33-35]. Be sure the source information is entered in "BibTeX" form in the `references.bib` file.
 
 # References
 
