@@ -1,0 +1,42 @@
+---
+title: "Week 1 Progress Report"
+subtitle: "DATA 450 Capstone"
+author: "Colin Arscott"
+date: 2/16/25
+date-format: "[Week ending: ] 02/16/25"
+number-sections: false
+format:
+  pdf: default
+---
+
+# Time Log
+
+| Day  | Time  | \# Hours | Task(s) | GH Commit(s) |
+|------|-------|----------|---------|--------|
+| Mon.  |  |  |  |  |
+| Tue.  |  |  |  |  |
+| Wed.  |  |  |  |  |
+| Thu.  |  |  |  |  |
+| Fri.  |  |  |  |  |
+| Sat.  | [8-10pm] | [3] | [Researching dashboard implementations] |  |
+| Sun.  |  |  |  |  |
+
+: {tbl-colwidths="[10, 15, 12, 50, 13]"}
+
+**Total \# of hours worked this week: [3]**
+
+## What you accomplished (or attempted) this week:
+
+This week I spent my time reasearching how to create a dashboard using python. In previous classes I've seen how its done using R, but I will be using python for this project. After a quick search I saw that plotly has a dashboard framework called dash. Since plotly is familiar, I will be using Dash to create my project's dashboard. I also looked at the source code of some of the example projects listed on the Dash github. 
+
+## Any setbacks/roadblocks you experienced:
+
+I had a very difficult time scheduling myeself time to work on the project. I had a very emotionally draining week 
+
+## What you plan to work on next:
+
+My plan for next week is to look into how I can expand the dataset to include years in the past. This will help me tell a better story with the data.
+
+## Are you on track? If not, how will you get back on track?
+
+I am not on track. I will need to allocate some more time next week to make up for the difference.
