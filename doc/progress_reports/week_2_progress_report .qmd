@@ -1,0 +1,42 @@
+---
+title: "Week 2 Progress Report"
+subtitle: "DATA 450 Capstone"
+author: "Colin Arscott"
+date: 2/23/25
+date-format: "[Week ending: ] 02/23/25"
+number-sections: false
+format:
+  pdf: default
+---
+
+# Time Log
+
+| Day  | Time  | \# Hours | Task(s) | GH Commit(s) |
+|------|-------|----------|---------|--------|
+| Mon.  | [10am-12pm] | [2] | [Dashboard Tutorial code] | [Commit](https://github.com/tint3dgreen/Capstone/commit/2e76e565dc572c09d602c159ac1dbfa56422d424) |
+| Tue.  | [8-10am] | [2] | [Data Searching] |  |
+| Wed.  |  |  |  |  |
+| Thu.  |  |  |  |  |
+| Fri.  |  |  |  |  |
+| Sat.  |  |  |  |  |
+| Sun.  |  |  |  |  |
+
+: {tbl-colwidths="[10, 15, 12, 50, 13]"}
+
+**Total \# of hours worked this week: [4]**
+
+## What you accomplished (or attempted) this week:
+
+This week I found a starting point for the dashboard as well as looked into the process of adding different elements. I also continued searching for data from years past to expand my dataset. I was unsuccessful
+
+## Any setbacks/roadblocks you experienced:
+
+Finidng the data from years past is proving to be a larger challenge than I anticipated. I am unsure if I am simply searching wrong or if the data is unavailable.
+
+## What you plan to work on next:
+
+I plan to get started on the first research question from my proposal. I would like to make some concrete progress before I continue on more research steps.
+
+## Are you on track? If not, how will you get back on track?
+
+I am on track. I would like to complete some more work in week 3 than I completed in week 1 and 2.
