@@ -1,0 +1,42 @@
+---
+title: "Week 5 Progress Report"
+subtitle: "DATA 450 Capstone"
+author: "Colin Arscott"
+date: 3/9/23
+date-format: "[Week ending: ] 3/9/25"
+number-sections: false
+format:
+  pdf: default
+---
+
+# Time Log
+
+| Day  | Time  | \# Hours | Task(s) | GH Commit(s) |
+|------|-------|----------|---------|--------|
+| Mon.  |  |  |  |  |
+| Tue.  |  |  |  |  |
+| Wed.  |  |  |  |  |
+| Thu.  |  |  |  |  |
+| Fri.  |  |  |  |  |
+| Sat.  |  |  |  |  |
+| Sun.  | [6-10pm] | [4] | [Research Question 1 Answered] | [Commit](https://github.com/tint3dgreen/Capstone/commit/4ad0fc432847a53c1887c1bfd1bf07c9fe33f37e) |
+
+: {tbl-colwidths="[10, 15, 12, 50, 13]"}
+
+**Total \# of hours worked this week: [4]**
+
+## What you accomplished (or attempted) this week:
+
+Finished the data transformations required to answer research Question 1. 
+
+## Any setbacks/roadblocks you experienced:
+
+No setbacks this week. I am happy with the quantity of work I completed.
+
+## What you plan to work on next:
+
+Next Week I will work on implementing a map of Seattle as well as research question 2. I will also create my presentation
+
+## Are you on track? If not, how will you get back on track?
+
+I am on track to complete what I want to complete before Spring Break.
