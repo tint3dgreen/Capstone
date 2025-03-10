@@ -1,0 +1,42 @@
+---
+title: "Week 4 Progress Report"
+subtitle: "DATA 450 Capstone"
+author: "Colin Arscott"
+date: 3/2/23
+date-format: "[Week ending: ] 3/2/25"
+number-sections: false
+format:
+  pdf: default
+---
+
+# Time Log
+
+| Day  | Time  | \# Hours | Task(s) | GH Commit(s) |
+|------|-------|----------|---------|--------|
+| Mon.  |  |  |  |  |
+| Tue.  |  |  |  |  |
+| Wed.  |  |  |  |  |
+| Thu.  |  |  |  |  |
+| Fri.  |  |  |  |  |
+| Sat.  |  |  |  |  |
+| Sun.  | [4-8pm] | [4] | [Data Cleaning, directory Restructuring, research] | [Commit](https://github.com/tint3dgreen/Capstone/commit/1e35d91a32c770a8575e2fc46ea511f063a846da) |
+
+: {tbl-colwidths="[10, 15, 12, 50, 13]"}
+
+**Total \# of hours worked this week: [4]**
+
+## What you accomplished (or attempted) this week:
+
+Did a small resturcture of the file system to separate data into different stages of processing. I also did some quick data cleaning to remove whitespace from the column names of both datasets. 
+
+## Any setbacks/roadblocks you experienced:
+
+Some more setbacks with scheduling myself time to get work done. There were a few days that I was sick this week, so that did not help.
+
+## What you plan to work on next:
+
+Next week I would like to answer at least one of the research questions from my initial proposal to get me back on track
+
+## Are you on track? If not, how will you get back on track?
+
+I am a little behind. I will add some more hours next week to get back on track
