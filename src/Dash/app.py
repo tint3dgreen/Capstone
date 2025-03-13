@@ -22,9 +22,23 @@ fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
 
 #These are the lines responsible for instantiating the graph
 
-data = geopandas.read_file("../../data/raw/Neighborhood_Map_Atlas_Districts.geojson")
+data = geopandas.read_file("../../data/processed/q1Map_in.geojson")
 
 fig_map = px.choropleth_mapbox(
+    data,
+    geojson=data.geometry,
+    color="Ratio_Under_35",
+    locations=data.index,  # Column in gdf to use for coloring
+    mapbox_style="carto-positron",
+    center={"lat": data.geometry.centroid.y.mean(), "lon": data.geometry.centroid.x.mean()},
+    opacity=0.5,
+    zoom = 10,
+    range_color=(0,1),
+    color_continuous_scale="Viridis",
+    labels={'value': 'Value'}
+)
+
+fig_map_base = px.choropleth_mapbox(
     data,
     geojson=data.geometry,
     locations=data.index,  # Column in gdf to use for coloring
@@ -32,6 +46,8 @@ fig_map = px.choropleth_mapbox(
     center={"lat": data.geometry.centroid.y.mean(), "lon": data.geometry.centroid.x.mean()},
     opacity=0.5,
     zoom = 10,
+    range_color=(0,1),
+    color_continuous_scale="Viridis",
     labels={'value': 'Value'}
 )
 
@@ -46,6 +62,7 @@ fig_map.update_geos(
 )
 
 fig_map.update_layout(height=600,width=400, margin={"r":0,"t":0,"l":0,"b":0})
+fig_map_base.update_layout(height=600,width=400, margin={"r":0,"t":0,"l":0,"b":0})
 
 
 app.layout = html.Div(children=[
@@ -58,6 +75,10 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='example-graph2',
         figure=fig_map
+    ),
+    dcc.Graph(
+        id='example-graph3',
+        figure=fig_map_base
     )
 ])
 
