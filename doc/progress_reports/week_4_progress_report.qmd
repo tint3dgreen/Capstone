@@ -4,6 +4,7 @@ subtitle: "DATA 450 Capstone"
 author: "Colin Arscott"
 date: 3/2/23
 date-format: "[Week ending: ] 3/2/25"
+
 number-sections: false
 format:
   pdf: default
@@ -40,3 +41,4 @@ Next week I would like to answer at least one of the research questions from my 
 ## Are you on track? If not, how will you get back on track?
 
 I am a little behind. I will add some more hours next week to get back on track
+
