@@ -135,3 +135,7 @@ dmypy.json
 .idea/inspectionProfiles/profiles_settings.xml
 doc/progress_reports/week_4_progress_report.pdf
 doc/progress_reports/week_5_progress_report.pdf
+data/processed/q1Map_in.geojson
+data/processed/q2Map_in.geojson
+data/processed/yearly_avg_income.csv
+data/processed/Neighborhood_alt_key.csv
