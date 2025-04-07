@@ -1,0 +1,43 @@
+---
+title: "Week 10 Progress Report"
+subtitle: "DATA 450 Capstone"
+author: "Colin Arscott"
+date: 4/6/25
+date-format: "[Week ending: ] 04/06/25"
+number-sections: false
+format:
+  pdf: default
+---
+
+# Time Log
+
+| Day  | Time  | \# Hours | Task(s) | GH Commit(s) |
+|------|-------|----------|---------|--------|
+| Mon.  | [12:00-6:00 AM]  | [6] | [Finished data cleaning and created graphs for poster. Made poster first draft] | [Commit](https://github.com/tint3dgreen/Capstone/commit/903b85a4ad96f353387f3119ead44ac2b5d0fb95) |
+| Tue.  |  |  |  |  |
+| Wed.  |  |  |  |  |
+| Thu.  |  |  |  |  |
+| Fri.  |  |  |  |  |
+| Sat.  |  |  |  |  |
+| Sun.  | 8:00-10:00 PM | 2 | [Poster Draft 2] |  |
+
+: {tbl-colwidths="[10, 15, 12, 50, 13]"}
+
+**Total \# of hours worked this week: [8]**
+
+
+## What you accomplished (or attempted) this week:
+
+This week I resolved the primary issue from my intermediate presentation. I was able to distinguish which neighborhoods were subsections of a larger neighborhood. The statistics from these neighborhoods were consolidated into one for visualizations.
+
+## Any setbacks/roadblocks you experienced:
+
+Procrastination was a major roadblock that caused me to work at very unreasonable hours in order to meed submission deadlines. Additionally the work was not of acceptable quality and needs to be revisited.
+
+## What you plan to work on next:
+
+Next week will be spend on revising the poster primarily. Secondarilly, I want to finalize the dashboard design with the hope to have it ready for the final poster.
+
+## Are you on track? If not, how will you get back on track?
+
+I am behind. I will need to put at least 2 meaningful hours of work into this project each day this week.
