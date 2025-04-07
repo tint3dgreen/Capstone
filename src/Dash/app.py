@@ -9,7 +9,12 @@ import plotly.express as px
 import pandas as pd
 from matplotlib.pyplot import title
 
-app = Dash()
+
+
+# Dashboard initialization
+external_stylesheets = ['style.css']
+app = Dash(external_stylesheets=external_stylesheets)
+
 
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
@@ -90,6 +95,7 @@ fig_map_income.update_layout(height=600,width=400, margin={"r":0,"t":0,"l":0,"b"
 piechart.update_layout(height=400,width=600, margin={"r":0,"t":0,"l":0,"b":0})
 
 
+
 app.layout = html.Div(children=[
     html.H1(children='Hello Dash'),
 
@@ -103,11 +109,13 @@ app.layout = html.Div(children=[
 
     dcc.Graph(
         id='example-graph2',
-        figure=fig_map
+        figure=fig_map,
+        className='chart'
     ),
     dcc.Graph(
         id='income_graph',
-        figure=fig_map_income
+        figure=fig_map_income,
+        style={'margin-right': 'auto','margin-left': 'auto','max_width': 'fit-content'}
     ),
     dcc.Graph(
         id='example-graph3',
