@@ -45,3 +45,33 @@ What does MHCrestriction mean physically>
 
 Generated data?
 boooooooooooring
+
+
+# Janelle
+
+manual Data Extraction??
+
+Her findings are interesting.
+Im looking forward to seeing how the sentiment analysis turns out
+
+
+# BAKI
+CAPSTONE PROJECT ON BAKI
+
+Opical character recognition - Using artificial intellignece to extract characters from manga panels
+
+The technology is very cool, but I do not really understand the goal.
+
+Sentiment analysis??
+
+
+# Bijay
+Analysis on gaming addiction
+Data - from steam
+More than 20 hours per week is considered addiction
+I was shocked to see how many people play games very casually
+
+He has a very thorough analysis. He looks to be in great shape
+
+dang, he has done so much. He is basically done with his project.
+10/10
