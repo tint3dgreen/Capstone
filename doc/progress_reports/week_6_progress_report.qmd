@@ -1,0 +1,46 @@
+---
+title: "Week 6 Progress Report"
+subtitle: "DATA 450 Capstone"
+author: "Colin Arscott"
+date: 3/16/23
+date-format: "[Week ending: ] 3/16/25"
+number-sections: false
+format:
+  pdf: default
+---
+
+# Time Log
+
+| Day  | Time  | \# Hours | Task(s) | GH Commit(s) |
+|------|-------|----------|---------|--------|
+| Mon.  |  |  |  |  |
+| Tue.  | [8-10AM, 7-12PM] | 7 hours | Dashboard implementation and presentation design | [Commit](https://github.com/tint3dgreen/Capstone/commit/225695054b6ff5fa263a1f2410ab22064720f0fb) |
+| Wed.  |  |  |  |  |
+| Thu.  |  |  |  |  |
+| Fri.  |  |  |  |  |
+| Sat.  |  |  |  |  |
+| Sun.  | 10-11PM | 1 hour | Presentation Feedback |  |
+
+: {tbl-colwidths="[10, 15, 12, 50, 13]"}
+
+**Total \# of hours worked this week: [8]**
+
+## What you accomplished (or attempted) this week:
+
+Completed my intermediate presentation.
+
+Dashboard now displays a map of Seattle.
+
+Research Q1 Answered
+
+## Any setbacks/roadblocks you experienced:
+
+Working on the slides took longer than I anticipated so I was unable to get more coding done
+
+## What you plan to work on next:
+
+Perform more data cleaning to reconcile the differences between the neighborhoods names in the two datasets.
+
+## Are you on track? If not, how will you get back on track?
+
+I am behind of where I want to be. I will be working over spring break to get back on track.
