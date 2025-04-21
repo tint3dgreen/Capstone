@@ -1,0 +1,43 @@
+---
+title: "Week 11 Progress Report"
+subtitle: "DATA 450 Capstone"
+author: "Colin Arscott"
+date: 4/20/25
+date-format: "[Week ending: ] 04/20/25"
+number-sections: false
+format:
+  pdf: default
+---
+
+# Time Log
+
+| Day  | Time  | \# Hours | Task(s) | GH Commit(s) |
+|------|-------|----------|---------|--------|
+| Mon.  | [12:00-3:00 PM]  | [3] | [Experimental Dashboard Styling] | [Commit](https://github.com/tint3dgreen/Capstone/commit/e6f4ddb2f730fc95c49718cf30c042396e0f3283) |
+| Tue.  |  |  |  |  |
+| Wed.  |  |  |  |  |
+| Thu.  |  |  |  |  |
+| Fri.  |  |  |  |  |
+| Sat.  |  |  |  |  |
+| Sun.  |  |  |  |  |
+
+: {tbl-colwidths="[10, 15, 12, 50, 13]"}
+
+**Total \# of hours worked this week: [3]**
+
+
+## What you accomplished (or attempted) this week:
+
+This week I spent my time experimenting on layouts for the dashboard.
+
+## Any setbacks/roadblocks you experienced:
+
+This week I was facing some mental issues which made it difficult to sit down and get to work.
+
+## What you plan to work on next:
+
+Next week I want to have a working version of the dashboard so I can begin honing in on the design.
+
+## Are you on track? If not, how will you get back on track?
+
+I am behind. I will need to put at least 2 meaningful hours of work into this project each day this week.
