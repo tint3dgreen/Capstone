@@ -1,0 +1,46 @@
+---
+title: "Housing Affordability in Seattle"
+subtitle: "Spring 2025"
+author: "Colin Arscott"
+bibliography: references.bib
+nocite: |
+  @*
+number-sections: false
+format:
+  html:
+    theme: default
+    rendering: embed-resources
+    code-fold: true
+    code-tools: true
+    toc: true
+jupyter: python3
+---
+![Source: LOC's Public Domain Image Archive](seattle_skyline.jpg){fig-alt="A photo of the Seattle skyline at dusk."}
+
+# Introduction
+
+# Data cleaning
+Once downloaded from the online dataset, the data was adjusted to replace all whitespace in column names with an underscore. This new dataset was exported for later use.
+```{python}
+#Import libraries
+import pandas as pd
+import numpy as np
+
+#read in data from the original source
+data_housing = pd.read_csv('../data/raw/housing_costs_Neighborhoods_-8848403750169343217.csv')
+data_income = pd.read_csv('../data/raw/incomes_Neighborhoods_-1139681776900304943.csv')
+
+# Replace whitespace in column names with an underscore
+data_housing.columns = [x.replace(" ","_") for x in data_housing.columns]
+data_income.columns = [x.replace(" ","_") for x in data_income.columns]
+
+# Export data with column whitespace removed to interim data
+data_housing.to_csv("../data/interim/housing_data.csv")
+data_income.to_csv("../data/interim/income_data.csv")
+```
+
+# Vizualizations
+
+# Dashboard
+
+# Conclusions
