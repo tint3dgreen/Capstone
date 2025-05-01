@@ -19,6 +19,10 @@ jupyter: python3
 
 # Introduction
 
+Seattle is a city that is well known for being a well developed tech hub. Companies such as Amazon, Meta, and Google have large offices in or around the city. Many recent graduates flock to Seattle with their Computer Science and Data Science degrees to look for employment with many of these tech giants. A key step in this process is finding a place to live. Seattle is a high cost of living city where rent costs ##### above the national average GET THE STATS AND CITE IT HERE. Seattle contains many different neighborhoods that each come with their own vibe and economic situation. From the corporate high rises of South Lake Union, to the bustling culture and restaurants in Capitol Hill, there are many options to choose from. These options all come in at drastically different price points, so a potential renter needs to be aware of the costs of the neigborhood they choose.
+
+The goal of this blog is to provide resources for you to help make this decision. 
+
 # Data cleaning
 Once downloaded from the online dataset, the data was adjusted to replace all whitespace in column names with an underscore. This new dataset was exported for later use.
 ```{python}
@@ -38,6 +42,57 @@ data_income.columns = [x.replace(" ","_") for x in data_income.columns]
 data_housing.to_csv("../data/interim/housing_data.csv")
 data_income.to_csv("../data/interim/income_data.csv")
 ```
+
+Next, I will create a key which maps the many alternative names that neighborhoods go by and combine them under the same entity.
+
+```{python}
+# Import geopandas library to parse the geojson data
+import geopandas as gpd
+# read in the data
+data = gpd.read_file("../../data/raw/Neighborhood_Map_Atlas_Districts.geojson")
+# Create a dataframe with containing the neighborhood names and a list of the alternate names for each neighborhood.+
+tmp = data[['L_HOOD',"S_HOOD_ALT_NAMES"]]
+
+# Remove all spaces from neighborhood names
+tmp['S_HOOD_ALT_NAMES'] = tmp['S_HOOD_ALT_NAMES'].apply(lambda x: str(x).replace(" ",""))
+tmp['alt_names_list'] = tmp['S_HOOD_ALT_NAMES'].apply(lambda x: x.split(","))
+
+# split each entry in the alternate names list into an individual row matching the larger neighborhood to one of its subsidiaries/ alternate names.
+tmp = tmp.explode("alt_names_list")
+tmp.to_csv("../../data/processed/Neighborhood_alt_key.csv")
+```
+
+Next transform the cleaned income dataset to calculate the Mean Annual Income for each neighborhood.
+```{python}
+income = pd.read_csv('../data/interim/income_data.csv',index_col=0)
+income.set_index('OBJECTID', inplace=True)
+
+key = pd.read_csv('../data/processed/Neighborhood_alt_key.csv',index_col=0)
+
+key.set_index('alt_names_list', inplace=True)
+
+income['Neighborhood_Name'] = income['Neighborhood_Name'].apply(lambda x: str(x).replace(" ",""))
+
+income.set_index('Neighborhood_Name', inplace=True)
+income = income.join(key, how='inner')
+income= income[['L_HOOD',"Aggregate_income_in_the_past_12_months_(in_2022_inflation-adjusted_dollars)","Total_Households","Total_Population"]]
+
+income = income.groupby('L_HOOD').agg(sum)
+
+income["Mean_Yearly_Income"] = income["Aggregate_income_in_the_past_12_months_(in_2022_inflation-adjusted_dollars)"]/income["Total_Households"]
+
+income.to_csv("../data/processed/yearly_avg_income.csv",index=True)
+```
+
+bind the data above to the geographic data
+```{python}
+map_data = gpd.read_file('../data/raw/Neighborhood_Map_Atlas_Districts.geojson')
+
+bind = map_data.set_index('L_HOOD').join(income, rsuffix='_hosuing')
+
+bind.to_file('../data/processed/q2Map_in.geojson', index=True)
+```
+
 
 # Vizualizations
 
