@@ -16,20 +16,11 @@ external_stylesheets = ['style.css']
 app = Dash(external_stylesheets=external_stylesheets)
 
 
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
-
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-
 #These are the lines responsible for instantiating the graph
 
 data = geopandas.read_file("../../data/processed/q1Map_in.geojson",index=True)
 income_data = geopandas.read_file("../../data/processed/q2Map_in.geojson",index=True)
+income_ratio = pd.read_csv("../../data/processed/yearly_avg_income_ratio.csv",index_col=0)
 
 fig_map = px.choropleth_mapbox(
     data,
@@ -42,7 +33,7 @@ fig_map = px.choropleth_mapbox(
     zoom = 10,
     range_color=(data["Ratio_Under_35"].min(),data["Ratio_Under_35"].max()),
     color_continuous_scale="rdylgn",
-    labels={'value': 'Value'}
+    labels={'Ratio_Under_35': 'Non-Rent Burdened Households (%)'}
 )
 
 fig_map_base = px.choropleth_mapbox(
@@ -70,8 +61,15 @@ fig_map_income = px.choropleth_mapbox(
     zoom = 10,
     range_color=(income_data["Mean_Yearly_Income"].min(),income_data["Mean_Yearly_Income"].max()),
     color_continuous_scale="rdylgn",
-    labels={'value': 'Value'}
+    labels={'Mean_Yearly_Income': 'Mean Annual Income (USD)'}
 )
+
+fig_ratio = px.scatter(income_ratio, x='Mean_Yearly_Income', y='Ratio_Under_35', trendline='ols',
+                       labels={
+                           "Mean_Yearly_Income": "Mean Annual Income (USD)",
+                           "Ratio_Under_35": "Non-Rent Burdened Households (%)",
+                       }
+                       )
 
 piechart = px.pie(
     income_data,
@@ -89,10 +87,11 @@ fig_map.update_geos(
     showrivers=True, rivercolor="Blue"
 )
 
-fig_map.update_layout(height=600,width=400, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Percent of Households with affordable rent")
+fig_map.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Percent of Households with affordable rent")
 fig_map_base.update_layout(height=600,width=400, margin={"r":0,"t":0,"l":0,"b":0})
-fig_map_income.update_layout(height=600,width=400, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Average Annual Income by Neighborhood")
+fig_map_income.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Average Annual Income by Neighborhood")
 piechart.update_layout(height=400,width=600, margin={"r":0,"t":0,"l":0,"b":0})
+fig_ratio.update_layout(height=400,width=800, margin={"r":0,"t":0,"l":0,"b":0})
 
 
 
@@ -124,6 +123,10 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id="pop_chart",
         figure=piechart
+    ),
+    dcc.Graph(
+        id="pop_chart2",
+        figure=fig_ratio
     )
 ])
 
