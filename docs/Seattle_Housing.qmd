@@ -19,9 +19,13 @@ jupyter: python3
 
 # Introduction
 
-Seattle is a city that is well known for being a well developed tech hub. Companies such as Amazon, Meta, and Google have large offices in or around the city. Many recent graduates flock to Seattle with their Computer Science and Data Science degrees to look for employment with many of these tech giants. A key step in this process is finding a place to live. Seattle is a high cost of living city where rent costs ##### above the national average GET THE STATS AND CITE IT HERE. Seattle contains many different neighborhoods that each come with their own vibe and economic situation. From the corporate high rises of South Lake Union, to the bustling culture and restaurants in Capitol Hill, there are many options to choose from. These options all come in at drastically different price points, so a potential renter needs to be aware of the costs of the neigborhood they choose.
+The American Dream is the idea that once of age, young adults in America are to set out on their own and work towards the ultimate goal of home ownership. However due to the rising cost of homes, it has become increasingly more difficult to achieve this goal. Additionally, an increasing number of young Americans are dealing with increasing rental costs and find themselves living paycheck to paycheck as a result. The goal of this project is to create a tool that people can use to explore housing affordability across Seattle’s many different neighborhoods. Seattle is a city that is well known for being a well developed tech hub. Companies such as Amazon, Meta, and Google have large offices in or around the city. Many recent graduates flock to Seattle with their Computer Science and Data Science degrees to look for employment with many of these tech giants. A key step in this process is finding a place to live. Seattle is a high cost of living city where rent costs are 114% @PayScale above the national average. Seattle contains many different neighborhoods that each come with their own vibe and economic situation. From the corporate high rises of South Lake Union, to the bustling culture and restaurants in Capitol Hill, there are many options to choose from. These options all come in at drastically different price points, so a potential renter needs to be aware of the costs of the neighborhood they choose.
 
-The goal of this blog is to provide resources for you to help make this decision. 
+The goal of this blog is to provide resources for you to help make this decision.
+
+# Data Acquisition
+
+The data for this project was sourced from census data collected from the city of Seattle in 2024. There are two primary datasets that I will be using from this census. I will use the housing costs by neighborhood dataset @sea24 as well as the income by neighborhood @seai24 dataset. The data is structured such that each observation contains aggregate census responses by each neighborhood. Households are placed into ‘bins’ based on income and housing costs. Housing costs are separated by renters and owners. This data allows me to get an accurate view of the housing and income distributions in Seattle at the time.
 
 # Data cleaning
 Once downloaded from the online dataset, the data was adjusted to replace all whitespace in column names with an underscore. This new dataset was exported for later use.
@@ -49,7 +53,7 @@ Next, I will create a key which maps the many alternative names that neighborhoo
 # Import geopandas library to parse the geojson data
 import geopandas as gpd
 # read in the data
-data = gpd.read_file("../../data/raw/Neighborhood_Map_Atlas_Districts.geojson")
+data = gpd.read_file("../data/raw/Neighborhood_Map_Atlas_Districts.geojson")
 # Create a dataframe with containing the neighborhood names and a list of the alternate names for each neighborhood.+
 tmp = data[['L_HOOD',"S_HOOD_ALT_NAMES"]]
 
@@ -59,7 +63,7 @@ tmp['alt_names_list'] = tmp['S_HOOD_ALT_NAMES'].apply(lambda x: x.split(","))
 
 # split each entry in the alternate names list into an individual row matching the larger neighborhood to one of its subsidiaries/ alternate names.
 tmp = tmp.explode("alt_names_list")
-tmp.to_csv("../../data/processed/Neighborhood_alt_key.csv")
+tmp.to_csv("../data/processed/Neighborhood_alt_key.csv")
 ```
 
 Next transform the cleaned income dataset to calculate the Mean Annual Income for each neighborhood.
@@ -96,6 +100,81 @@ bind.to_file('../data/processed/q2Map_in.geojson', index=True)
 
 # Vizualizations
 
+### Mean Neighborhood Income
+```{python}
+#| label: fig-choropleth-seattle-income
+import plotly.express as px
+import geopandas
+
+data = geopandas.read_file("../data/processed/q1Map_in.geojson",index=True)
+income_data = geopandas.read_file("../data/processed/q2Map_in.geojson",index=True)
+income_ratio = pd.read_csv("../data/processed/yearly_avg_income_ratio.csv",index_col=0)
+
+#Graph of Mean Yearly Household Income by Neighborhood
+fig_map_income = px.choropleth_mapbox(
+    income_data,
+    geojson=data.geometry,
+    color="Mean_Yearly_Income",
+    locations=data.index,  # Column in gdf to use for coloring
+    mapbox_style="carto-positron",
+    center={"lat": data.geometry.centroid.y.mean(), "lon": data.geometry.centroid.x.mean()},
+    opacity=0.5,
+    zoom = 10,
+    range_color=(income_data["Mean_Yearly_Income"].min(),income_data["Mean_Yearly_Income"].max()),
+    color_continuous_scale="rdylgn",
+    labels={'Mean_Yearly_Income': 'Mean Annual Income (USD)'}
+)
+
+# This code was adapted from the plotly express choropleth documentation example code
+fig_map_income.update_geos(
+    resolution=50,
+    scope = 'usa',
+    showcoastlines=True, coastlinecolor="RebeccaPurple",
+    showland=True, landcolor="LightGreen",
+    showocean=True, oceancolor="LightBlue",
+    showlakes=True, lakecolor="Blue",
+    showrivers=True, rivercolor="Blue"
+)
+fig_map_income.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Average Annual Income by Neighborhood")
+
+fig_map_income.show()
+```
+
+As shown above @fig-choropleth-seattle-income displays the average household income level across the different neighborhoods in Seattle.
+
+### Rent Burden by Neighborhood
+
+```{python}
+
+fig_map_burden = px.choropleth_mapbox(
+    data,
+    geojson=data.geometry,
+    color="Ratio_Under_35",
+    locations=data.index,  # Column in gdf to use for coloring
+    mapbox_style="carto-positron",
+    center={"lat": data.geometry.centroid.y.mean(), "lon": data.geometry.centroid.x.mean()},
+    opacity=0.5,
+    zoom = 10,
+    range_color=(data["Ratio_Under_35"].min(),data["Ratio_Under_35"].max()),
+    color_continuous_scale="rdylgn",
+    labels={'Ratio_Under_35': 'Non-Rent Burdened Households (%)'}
+)
+
+# This code was adapted from the plotly express choropleth documentation example code
+fig_map_burden.update_geos(
+    resolution=50,
+    scope = 'usa',
+    showcoastlines=True, coastlinecolor="RebeccaPurple",
+    showland=True, landcolor="LightGreen",
+    showocean=True, oceancolor="LightBlue",
+    showlakes=True, lakecolor="Blue",
+    showrivers=True, rivercolor="Blue"
+)
+
+fig_map_burden.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Percent of Households with affordable rent")
+
+fig_map_burden.show()
+```
 # Dashboard
 
 # Conclusions
