@@ -27,7 +27,7 @@ The goal of this blog is to provide resources for you to help make this decision
 
 The data for this project was sourced from census data collected from the city of Seattle in 2024. There are two primary datasets that I will be using from this census. I will use the housing costs by neighborhood dataset @sea24 as well as the income by neighborhood @seai24 dataset. The data is structured such that each observation contains aggregate census responses by each neighborhood. Households are placed into ‘bins’ based on income and housing costs. Housing costs are separated by renters and owners. This data allows me to get an accurate view of the housing and income distributions in Seattle at the time.
 
-# Data cleaning
+# Data Cleaning and Processing
 Once downloaded from the online dataset, the data was adjusted to replace all whitespace in column names with an underscore. This new dataset was exported for later use.
 ```{python}
 #Import libraries
@@ -103,11 +103,11 @@ bind.to_file('../data/processed/q2Map_in.geojson', index=True)
 ### Mean Neighborhood Income
 ```{python}
 #| label: fig-choropleth-seattle-income
+#| warning: false
 import plotly.express as px
-import geopandas
 
-data = geopandas.read_file("../data/processed/q1Map_in.geojson",index=True)
-income_data = geopandas.read_file("../data/processed/q2Map_in.geojson",index=True)
+data = gpd.read_file("../data/processed/q1Map_in.geojson",index=True)
+income_data = gpd.read_file("../data/processed/q2Map_in.geojson",index=True)
 income_ratio = pd.read_csv("../data/processed/yearly_avg_income_ratio.csv",index_col=0)
 
 #Graph of Mean Yearly Household Income by Neighborhood
@@ -140,7 +140,7 @@ fig_map_income.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b"
 fig_map_income.show()
 ```
 
-As shown above @fig-choropleth-seattle-income displays the average household income level across the different neighborhoods in Seattle.
+As shown above @fig-choropleth-seattle-income displays the average household income level across the different neighborhoods in Seattle. Some code from this section was adapted from @Plotly
 
 ### Rent Burden by Neighborhood
 

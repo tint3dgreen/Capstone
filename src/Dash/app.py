@@ -21,6 +21,7 @@ app = Dash(external_stylesheets=external_stylesheets)
 data = geopandas.read_file("../../data/processed/q1Map_in.geojson",index=True)
 income_data = geopandas.read_file("../../data/processed/q2Map_in.geojson",index=True)
 income_ratio = pd.read_csv("../../data/processed/yearly_avg_income_ratio.csv",index_col=0)
+mortgage_ratio = geopandas.read_file("../../data/processed/q4Map_in.geojson",index=True)
 
 fig_map = px.choropleth_mapbox(
     data,
@@ -47,6 +48,21 @@ fig_map_base = px.choropleth_mapbox(
     range_color=(0,1),
     color_continuous_scale="Viridis",
     labels={'value': 'Value'}
+)
+
+fig_map_mortgage_ratio = px.choropleth_mapbox(
+    mortgage_ratio,
+    geojson=data.geometry,
+    locations=data.index,
+    color= 'Ratio_Under_25',# Column in gdf to use for coloring
+    mapbox_style="carto-positron",
+    center={"lat": data.geometry.centroid.y.mean(), "lon": data.geometry.centroid.x.mean()},
+    opacity=0.5,
+    zoom=10,
+    range_color=(0, 1),
+    color_continuous_scale="Viridis",
+    labels={'value': 'Value'},
+    hover_data="L_HOOD"
 )
 
 #Graph of Mean Yearly Household Income by Neighborhood
@@ -92,6 +108,7 @@ fig_map_base.update_layout(height=600,width=400, margin={"r":0,"t":0,"l":0,"b":0
 fig_map_income.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Average Annual Income by Neighborhood")
 piechart.update_layout(height=400,width=600, margin={"r":0,"t":0,"l":0,"b":0})
 fig_ratio.update_layout(height=400,width=800, margin={"r":0,"t":0,"l":0,"b":0})
+fig_map_mortgage_ratio.update_layout(height=400,width=800, margin={"r":0,"t":0,"l":0,"b":0})
 
 
 
@@ -101,6 +118,12 @@ app.layout = html.Div(children=[
     html.Div(children='''
         Dash: A web application framework for your data.
     '''),
+
+    dcc.Graph(
+        id='mortgage-graph',
+        figure=fig_map_mortgage_ratio,
+        className='chart',
+    ),
 
     html.Div(children='''
         lah dee dah
