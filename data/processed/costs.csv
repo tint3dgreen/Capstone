@@ -1,0 +1,19 @@
+L_HOOD,Neighborhood_Name,Renter_housing_units_with_gross_rent,Gross_Rent_Less_Than_$500,Gross_Rent_$500-$999,"Gross_Rent_$1,000-$1,499","Gross_Rent_$1,500-$1,999","Gross_Rent_$2,000-$2,499","Gross_Rent_$2,500-$2,999","Gross_Rent_$3,000-$3,499","Gross_Rent_$3,500_or_more",Owner_housing_units_with_a_mortgage,"Owner_Costs_Less_Than_$1,000","Owner_Costs_$1,000-$1,499","Owner_Costs_$1,500-$1,999","Owner_Costs_$2,000-$2,499","Owner_Costs_$2,500-$2,999","Owner_Costs_$3,000-$3,499","Owner_Costs_$3,500-$3,999","Owner_Costs_$4,000_or_more"
+Ballard,WhittierHeightsBallardBallard,15572,238,113,1650,4266,3883,2753,1371,1298,7563,28,40,324,974,1036,1367,1135,2659
+Beacon Hill,NorthBeaconHill,1537,80,27,143,564,374,154,51,144,1027,27,88,11,166,99,195,172,269
+Capitol Hill,NorthCapitolHillMillerParkMadisonParkMadison-Miller,7706,336,179,924,2487,1889,1045,336,510,4227,13,0,118,466,450,542,467,2171
+Cascade,EastlakeSouthLakeUnion,10330,175,297,787,1863,2591,2282,1084,1251,853,20,49,16,92,187,51,80,358
+Central Area,JudkinsPark,1761,243,228,260,139,370,286,113,122,271,0,0,18,68,37,37,73,38
+Delridge,NorthDelridgeHighPointRiverviewHighlandParkHighlandPark,5944,419,322,1556,1319,1013,748,276,291,7053,61,304,683,1103,1507,1393,1025,977
+Downtown,FirstHillBelltown,14088,974,814,2087,2849,2616,1925,1341,1482,2530,0,58,156,298,288,713,322,695
+Greater Duwamish,SouthParkSouthParkGeorgetown,1857,145,401,471,358,280,132,55,15,1392,42,76,219,66,542,205,168,74
+Interbay,Interbay,4130,98,39,432,1028,985,722,344,482,1521,8,15,180,258,243,145,96,576
+North Central,GreenLakeGreenLakeFremontFremontWallingfordWallingford,24594,805,618,3370,6913,6747,2315,1372,2454,9835,11,169,497,1092,1246,1503,1197,4120
+Northeast,Roosevelt,1892,0,23,171,596,849,67,104,82,335,0,0,10,14,40,77,14,180
+Northgate,LictonSpringsHallerLake,4578,270,101,851,1497,1006,329,361,163,3431,42,70,359,640,675,550,245,850
+Northwest,NorthBeach/BlueRidgeCrownHill,1832,142,24,244,429,514,113,207,159,3983,48,107,213,278,553,834,524,1426
+Queen Anne,Uptown,6836,162,57,588,2269,1729,1228,451,352,1326,0,66,213,117,207,294,253,176
+Rainier Valley,RainierBeachRainierBeachColumbiaCityColumbiaCity,10271,1268,1068,1855,2328,1397,1077,729,549,7646,69,174,1028,1639,1198,1192,1044,1302
+Seward Park,SewardPark,1135,0,79,286,351,66,169,72,112,2084,23,37,139,187,215,433,344,706
+University District,UniversityDistrictUniversityDistrict,14811,242,1308,4010,4356,2890,972,470,563,927,0,7,131,68,115,92,79,435
+West Seattle,ArborHeightsWestSeattleJunctionMorganJunction,5126,149,60,661,1657,1197,887,241,274,4124,11,110,623,558,711,746,497,868

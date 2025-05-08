@@ -23,12 +23,12 @@ The American Dream is the idea that once of age, young adults in America are to 
 
 The goal of this blog is to provide resources for you to help make this decision.
 
-# Data Acquisition
+## Data Acquisition
 
-The data for this project was sourced from census data collected from the city of Seattle in 2024. There are two primary datasets that I will be using from this census. I will use the housing costs by neighborhood dataset @sea24 as well as the income by neighborhood @seai24 dataset. The data is structured such that each observation contains aggregate census responses by each neighborhood. Households are placed into ‘bins’ based on income and housing costs. Housing costs are separated by renters and owners. This data allows me to get an accurate view of the housing and income distributions in Seattle at the time.
+The data for this project was sourced from census data collected from the city of Seattle in 2024. There are two primary datasets that I will be using from this census. I will use the housing costs by neighborhood dataset @sea24 as well as the income by neighborhood @seai24 dataset. The data is structured such that each observation contains aggregate census responses by each neighborhood. Households are placed into ‘bins’ based on income and housing costs. Housing costs are separated by renters and owners. This data allows me to get an accurate view of the housing and income distributions in Seattle at the time. A third, geographic dataset was used to place the Seattle neighborhoods on a map. This data was also sourced from the city of Seattle.
 
-# Data Cleaning and Processing
-Once downloaded from the online dataset, the data was adjusted to replace all whitespace in column names with an underscore. This new dataset was exported for later use.
+## Data Cleaning and Processing
+Once downloaded, minimal cleaning was needed before working with the data. I replaced all whitespace in the column names and data fields with underscores. This was done to ensure consistency across the multiple datasets as well as to make the data easier to refer to.
 ```{python}
 #Import libraries
 import pandas as pd
@@ -47,9 +47,11 @@ data_housing.to_csv("../data/interim/housing_data.csv")
 data_income.to_csv("../data/interim/income_data.csv")
 ```
 
-Next, I will create a key which maps the many alternative names that neighborhoods go by and combine them under the same entity.
+Next, I need to create a key to associate any small neighborhoods that do not appear on my map with the larger neighborhood that contains them. This needs to be done because there are many neighborhoods in the the income and housing datasets which are subsets of larger neighborhoods. The counts of these smaller neighborhoods are not included in the counts for the large ones, so they will need to be combined before I perform any calculations. 
 
 ```{python}
+#| warning: false
+
 # Import geopandas library to parse the geojson data
 import geopandas as gpd
 # read in the data
@@ -66,115 +68,243 @@ tmp = tmp.explode("alt_names_list")
 tmp.to_csv("../data/processed/Neighborhood_alt_key.csv")
 ```
 
-Next transform the cleaned income dataset to calculate the Mean Annual Income for each neighborhood.
+
+# Results
+
+## Which Seattle neighborhoods are the least rent burdened?
+
+In order for rent costs to stay affordable, it is reccommended that monthly rent costs not exceed 33% of gross monthly household income. For the purposed of this project. I considered any household with monthly rent costs higher than 35% of gross monthy income to be "Rent Burdened". This is to say that the cost of rent placed an exceedingly high burden on the household budget. Are there neighborhoods that are more more burdened by rent than others? To answer this question I summed the number of households in each neighborhood that had rent costs that were 30% or less of the gross household income. I used this number and the total number of rental households in each district to calculate the percentage of households in that neighborhood that are unburdened by rent costs.
+
 ```{python}
+#| warning: false
+#| label: fig-burden
+
+#load housing data
+housing = pd.read_csv('../data/interim/housing_data.csv')
+# remove whitespace from neighborhood names
+housing['Neighborhood_Name'] = housing['Neighborhood_Name'].apply(lambda x: str(x).replace(" ",""))
+
+# Use the Key to Join sub-neighborhoods together and aggregate the values
+key = pd.read_csv("../data/processed/Neighborhood_alt_key.csv", index_col=0).set_index("alt_names_list")
+key
+
+join_test = housing.join(key, on='Neighborhood_Name', how='inner', rsuffix='_alt_key')
+
+cols = ['L_HOOD','Gross_Rent_as_a_Percentage_of_Household_Income_Less_than_15.0%','Gross_Rent_as_a_Percentage_of_Household_Income_15.0_to_19.9%','Gross_Rent_as_a_Percentage_of_Household_Income_20.0_to_24.9%', 'Gross_Rent_as_a_Percentage_of_Household_Income_25.0_to_29.9%','Renter_Households']
+
+join_test = join_test[cols].groupby("L_HOOD").agg(sum)
+
+
+#calculate the percentage of unburdened households
+cols = ['Gross_Rent_as_a_Percentage_of_Household_Income_Less_than_15.0%','Gross_Rent_as_a_Percentage_of_Household_Income_15.0_to_19.9%','Gross_Rent_as_a_Percentage_of_Household_Income_20.0_to_24.9%', 'Gross_Rent_as_a_Percentage_of_Household_Income_25.0_to_29.9%']
+test = housing[cols]
+join_test['Total_under_35'] = np.sum(join_test[cols],axis=1)
+
+join_test["Ratio_Under_35"] = join_test["Total_under_35"]/join_test["Renter_Households"]
+
+# Read in geographic data
+map_data = gpd.read_file('../data/raw/Neighborhood_Map_Atlas_Districts.geojson')
+# Merge Geographic data with the calculated values
+burden =  map_data.set_index('L_HOOD').join(join_test, rsuffix='_hosuing')
+
+import plotly.express as px
+
+fig_burden = px.choropleth_mapbox(
+    burden,
+    geojson=burden.geometry,
+    color="Ratio_Under_35",
+    locations=burden.index,  # Column in gdf to use for coloring
+    mapbox_style="carto-positron",
+    center={"lat": burden.geometry.centroid.y.mean(), "lon": burden.geometry.centroid.x.mean()},
+    opacity=0.5,
+    zoom=10,
+    range_color=(burden["Ratio_Under_35"].min(), burden["Ratio_Under_35"].max()),
+    color_continuous_scale="rdylgn",
+    labels={'Ratio_Under_35': 'Non-Rent Burdened Households (%)'}
+)
+fig_burden.update_layout(height=600, width=550, margin={"r": 0, "t": 0, "l": 0, "b": 0},
+                      title_text="Percent of Households with affordable rent")
+
+fig_burden.show()
+```
+
+As is shown in @fig-burden, the neighborhoods widely differ by how many of their residents are burdened by the rent to live there. The neighborhood with the lowest percentage of households that are unburdedend by rent is the University District. Only 28.6% of its residents are not burdened by their monthly rent payments. This means 71.4% of renter households in this neighborhood pay more for rent than reccomended.
+
+Alternatively, the residents of the Interbay Neighborhood are unburdened by comparrison. This neighborhood has the lowest rent burden rate in the city with only 25.7% of its residents paying above the reccomended amount each month.
+
+## Does a neighborhood's income level have an effect on its residents rent burden?
+
+Now that we see that the neighborhoods each have different levels of rent burden, this brings up the question of what factors cause this difference between them? To attempt to answer this question, I explored the mean income levels of the neighborhoods.
+
+```{python}
+#| warning: false
+#| label: fig-income
+
+# Read in income data
 income = pd.read_csv('../data/interim/income_data.csv',index_col=0)
 income.set_index('OBJECTID', inplace=True)
 
+# read in key
 key = pd.read_csv('../data/processed/Neighborhood_alt_key.csv',index_col=0)
 
 key.set_index('alt_names_list', inplace=True)
-
+# replace whitespace in neighborhood names
 income['Neighborhood_Name'] = income['Neighborhood_Name'].apply(lambda x: str(x).replace(" ",""))
 
+# Use the Key to Join sub-neighborhoods together and aggregate the values
 income.set_index('Neighborhood_Name', inplace=True)
 income = income.join(key, how='inner')
 income= income[['L_HOOD',"Aggregate_income_in_the_past_12_months_(in_2022_inflation-adjusted_dollars)","Total_Households","Total_Population"]]
 
 income = income.groupby('L_HOOD').agg(sum)
 
+# Calculate mean annual income for each neighborhood.
 income["Mean_Yearly_Income"] = income["Aggregate_income_in_the_past_12_months_(in_2022_inflation-adjusted_dollars)"]/income["Total_Households"]
 
-income.to_csv("../data/processed/yearly_avg_income.csv",index=True)
-```
 
-bind the data above to the geographic data
-```{python}
 map_data = gpd.read_file('../data/raw/Neighborhood_Map_Atlas_Districts.geojson')
+income_data = map_data.set_index('L_HOOD').join(income, rsuffix='_hosuing')
 
-bind = map_data.set_index('L_HOOD').join(income, rsuffix='_hosuing')
-
-bind.to_file('../data/processed/q2Map_in.geojson', index=True)
-```
-
-
-# Vizualizations
-
-### Mean Neighborhood Income
-```{python}
-#| label: fig-choropleth-seattle-income
-#| warning: false
-import plotly.express as px
-
-data = gpd.read_file("../data/processed/q1Map_in.geojson",index=True)
-income_data = gpd.read_file("../data/processed/q2Map_in.geojson",index=True)
-income_ratio = pd.read_csv("../data/processed/yearly_avg_income_ratio.csv",index_col=0)
-
-#Graph of Mean Yearly Household Income by Neighborhood
 fig_map_income = px.choropleth_mapbox(
     income_data,
-    geojson=data.geometry,
+    geojson=income_data.geometry,
     color="Mean_Yearly_Income",
-    locations=data.index,  # Column in gdf to use for coloring
+    locations=income_data.index,  # Column in gdf to use for coloring
     mapbox_style="carto-positron",
-    center={"lat": data.geometry.centroid.y.mean(), "lon": data.geometry.centroid.x.mean()},
+    center={"lat": income_data.geometry.centroid.y.mean(), "lon": income_data.geometry.centroid.x.mean()},
     opacity=0.5,
-    zoom = 10,
-    range_color=(income_data["Mean_Yearly_Income"].min(),income_data["Mean_Yearly_Income"].max()),
+    zoom=10,
+    range_color=(income_data["Mean_Yearly_Income"].min(), income_data["Mean_Yearly_Income"].max()),
     color_continuous_scale="rdylgn",
     labels={'Mean_Yearly_Income': 'Mean Annual Income (USD)'}
 )
-
-# This code was adapted from the plotly express choropleth documentation example code
-fig_map_income.update_geos(
-    resolution=50,
-    scope = 'usa',
-    showcoastlines=True, coastlinecolor="RebeccaPurple",
-    showland=True, landcolor="LightGreen",
-    showocean=True, oceancolor="LightBlue",
-    showlakes=True, lakecolor="Blue",
-    showrivers=True, rivercolor="Blue"
-)
-fig_map_income.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Average Annual Income by Neighborhood")
-
+fig_map_income.update_layout(height=600, width=550, margin={"r": 0, "t": 0, "l": 0, "b": 0},
+                             title_text="Average Annual Income by Neighborhood")
 fig_map_income.show()
 ```
 
-As shown above @fig-choropleth-seattle-income displays the average household income level across the different neighborhoods in Seattle. Some code from this section was adapted from @Plotly
-
-### Rent Burden by Neighborhood
+@fig-income shows the mean annual income in each neighborhood. At a glace, there appears to be alot of overlap between @fig-income and @fig-burden. Once again, the University district trails the other districts with a mean annual household income of $89,000/year. The neighborhood with the highest mean annual income is Capitol Hill with a mean annual salary of $239,000/year. These results show that Seattle is a city of high earners overall with each neighborhood earning significantly more than the national average. It is surprising to see that a city filled with so many high earners can also have such high rates of rent burdened households. What is the correlation between neighborhood income and rent burden rates?
 
 ```{python}
+#| label: fig-reg
 
-fig_map_burden = px.choropleth_mapbox(
-    data,
-    geojson=data.geometry,
-    color="Ratio_Under_35",
-    locations=data.index,  # Column in gdf to use for coloring
-    mapbox_style="carto-positron",
-    center={"lat": data.geometry.centroid.y.mean(), "lon": data.geometry.centroid.x.mean()},
-    opacity=0.5,
-    zoom = 10,
-    range_color=(data["Ratio_Under_35"].min(),data["Ratio_Under_35"].max()),
-    color_continuous_scale="rdylgn",
-    labels={'Ratio_Under_35': 'Non-Rent Burdened Households (%)'}
-)
-
-# This code was adapted from the plotly express choropleth documentation example code
-fig_map_burden.update_geos(
-    resolution=50,
-    scope = 'usa',
-    showcoastlines=True, coastlinecolor="RebeccaPurple",
-    showland=True, landcolor="LightGreen",
-    showocean=True, oceancolor="LightBlue",
-    showlakes=True, lakecolor="Blue",
-    showrivers=True, rivercolor="Blue"
-)
-
-fig_map_burden.update_layout(height=600,width=500, margin={"r":0,"t":0,"l":0,"b":0}, title_text="Percent of Households with affordable rent")
-
-fig_map_burden.show()
+income_ratio = income.join(burden, on='L_HOOD')
+fig = px.scatter(income_ratio, x='Mean_Yearly_Income', y='Ratio_Under_35', trendline='ols')
+fig.show()
 ```
+
+Plotting mean neighborhood annual income against its rate of rent unburdened households shows a clear positive correlation between these two variables. This is unsurprising as having higher income makes rent fees easier to pay. However, despite this positive trend, there are multiple high earning neighborhoods that also have middle of the pack rent burden rates. 
+
+## How do Seattle homeowners fare in terms of housing burden?
+
+In America, owning a home is often seen as the first step to building wealth. However, this can sometimes be a misconception as there are many costs associated with homeownership. It is not uncommon for households to purchase a more expensive house then they can realistically afford. This can have many outcomes ranging from being "house poor" to home foreclosure. It is for this reason that it is important that the home you pick is one that you can afford. One important metric is the monthly mortgage payment. Chase Bank reccomends that mortgage payments not exceed 25% of household gross income. For this reason I will use that as the cutoff threshold for homeowner cost burden. 
+
+```{python}
+#| warning: false
+#| label: fig-owner
+
+# read data in
+housing = pd.read_csv("../data/interim/housing_data.csv", index_col=0)
+# replace whitespace
+housing['Neighborhood_Name'] = housing['Neighborhood_Name'].apply(lambda x: str(x).replace(" ",""))
+
+
+# Shorten relevant column names
+mortgage = housing[['Neighborhood_Name','Owner_Households','Owner_housing_units_with_a_mortgage_where_selected_monthly_onwer_costs_as_a_percentage_of_household_income_can_be_computed','Selected_Monthly_Owner_Costs_as_a_Percentage_of_Household_Income_Less_than_20.0%','Selected_Monthly_Owner_Costs_as_a_Percentage_of_Household_Income_20.0_to_24.9%','Selected_Monthly_Owner_Costs_as_a_Percentage_of_Household_Income_25.0_to_29.9%','Selected_Monthly_Owner_Costs_as_a_Percentage_of_Household_Income_30.0_to_34.9%','Selected_Monthly_Owner_Costs_as_a_Percentage_of_Household_Income_35.0%_or_more']]
+
+new_cols = ['Neighborhood_Name','Owner_Households','Non-Zero_Cost_Owner_Households','Owner_Costs_lt_20.0%','Owner_Costs_20.0-24.9%', 'Owner_Costs_25.0-29.9%','Owner_Costs_30.0-34.9%','Owner_Costs_Over_35']
+
+mortgage.columns = new_cols
+
+
+# Use the Key to aggregate by neighborhood
+key = pd.read_csv("../data/processed/Neighborhood_alt_key.csv", index_col=0).set_index("alt_names_list")
+
+mortgage_merge = mortgage.join(key, on='Neighborhood_Name', how='inner', rsuffix='_alt_key')
+mortgage_merge = mortgage_merge.groupby("L_HOOD").agg(sum)
+
+# Calculate unburdened household rate
+mortgage_merge['Total_Under_25'] = np.sum(mortgage_merge[['Owner_Costs_lt_20.0%','Owner_Costs_20.0-24.9%']],axis= 1)
+mortgage_merge['Ratio_Under_25'] = mortgage_merge['Total_Under_25'] / mortgage_merge['Owner_Households']
+
+# combine with map data
+homeowner = map_data.set_index('L_HOOD').join(mortgage_merge, rsuffix='_hosuing')
+homeowner.reset_index(inplace=True)
+
+fig_map_mortgage_ratio = px.choropleth_mapbox(
+    homeowner,
+    geojson=homeowner.geometry,
+    locations=homeowner.index,
+    color='Ratio_Under_25',  # Column in gdf to use for coloring
+    mapbox_style="carto-positron",
+    center={"lat": homeowner.geometry.centroid.y.mean(), "lon": homeowner.geometry.centroid.x.mean()},
+    opacity=0.5,
+    zoom=10,
+    range_color=(homeowner["Ratio_Under_25"].min(), homeowner["Ratio_Under_25"].max()),
+    color_continuous_scale="rdylgn",
+    labels={'value': 'Value'},
+    hover_data='L_HOOD'
+)
+
+fig_map_mortgage_ratio.update_layout(height=600, width=550, margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
+fig_map_mortgage_ratio.show()
+```
+
+As shown above, @fig-owner shows the percentage of homeowners in each neighborhood who are unburdened by their mortgage payments. At a glance it appears that in general homeowners are burdened by their mortgages at a lower rate than renters are burdened by their rent. Is there a statistically significant difference between the two? 
+
+## Hypothesis Testing
+
+To answer this question I will perform a z-test to find if there is a significant difference between the proportion of renters who are unburdened by rent payments and the proportion of homeowners who are unburdened by mortgage payments.
+
+$H_0: \hat{p_{rent}} = \hat{p_{own}}$
+
+$H_a: \hat{p_{rent}} \neq \hat{p_{own}}$
+
+
+```{python}
+burden.reset_index(inplace=True)
+```
+
+```{python}
+homeowner.reset_index(inplace=True)
+```
+
+```{python}
+#| label: table-sig
+
+# get sample size and proportions for each group
+mortgage =homeowner[['L_HOOD','Owner_Households','Total_Under_25']]
+rent = burden[['L_HOOD','Renter_Households','Total_under_35']]
+
+merged = pd.merge(rent, mortgage, on='L_HOOD')
+
+# Hypothesis test with alpha = 0.05
+from statsmodels.stats.proportion import proportions_ztest
+alpha = 0.05
+sig = pd.DataFrame(columns=["Neighborhood","Difference","Significant"])
+
+for index,row in merged.iterrows():
+    # renter proportion - homeowner proportion
+    difference = (row['Total_under_35']/row['Renter_Households']) - (row['Total_Under_25']/row['Owner_Households'])
+
+    success = [row['Total_under_35'],row['Total_Under_25']]
+    attampts = [row['Renter_Households'],row['Owner_Households']]
+    # proportion_ztest([Array of successes], [Array of attemps])
+    z_score, p_value = proportions_ztest(success,attampts)
+    sig.loc[len(sig)] = [row['L_HOOD'],difference,(p_value < 0.05)]
+sig.dropna(inplace=True)
+sig
+```
+
+The results of the hypothesis test show that there is a significant evidence to reject $H_0$ in favor of $H_a$ in all neighborhoods except for Rainier Valley. This means that the difference between the proportions is statistically significant. As shown in @table-sig, in 13 out of the 20 neighborhoods, there is a higher proportion of renters who are not burdened by rent than there are homeowners who are unburdened by mortgage payments.
+
 # Dashboard
 
+The final goal of this project is to use the information collected to make a tool that will help people who are planning to move to Seattle to find a neighborhood to move to that matches their budget. To accomplish this, I made an interactive dashboard using @Dash from @Plotly. This dashboard should be usable below. To use the dashboard, simply select wheter you are interesting in rent prices or mortgage prices. Then use the slider to input your desired price range. The map of Seattle will then get colored in based on the concentration of homes in each neighborhood that fall within you specified budget range. This tool is intended to help those who are new to the area find which areas best fit their budget so they can begin looking for homes or apartments in that area.
+
+<iframe src="http://127.0.0.1:8050/" width="100%" height="1100px"></iframe>
+
 # Conclusions
+
+Seattle is a city of high earners and even higher housing costs. Through analysis I was able to determine that the residents of each of Seattles neighborhoods afford their rent at different rates from the others. I found that mean annual income plays a large role in neighborhood rent burden rates. Regarding homeowners, it was found that seattle homeowners are burdened by their mortgage payments at a different rate then renters in the same neighborhood. Also, renters were had lower burden rates in the majority of neighborhoods across the city.
