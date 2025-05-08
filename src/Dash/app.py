@@ -24,18 +24,18 @@ app.layout = html.Div(className = 'title',children=[
     html.Div(children='''
         This is an interactive dashboard to aid in finding a neighborhood that best aligns with your financial needs.
     ''', style={'textAlign': 'center'}),
-
+    dcc.RangeSlider(0,3500,500, value=[1000,2500], id='RangeSlider'),
     html.Center( className='lah',
         children=[
                 html.Div(children=[
-                    html.Center(children=["Select Your Budget (USD/Month)"]),
-                    dcc.RangeSlider(0,3500,500, value=[1000,2500], id='RangeSlider'),
+                    html.Center(children=["Select Your Budget (USD/Month)"])
+                    ,
                     dcc.RadioItems(id='Mode_selector', options=['Rent',"Mortgage"], value='Rent')],
-                    style={'padding':10, 'flex':1, 'max-width': '25%', 'margin':'10', 'align-self':'center'}),
+                    style={'padding':10, 'flex':1, 'max-width': '50%', 'margin':'10', 'align-self':'center'}),
                 html.Div(children=
                     dcc.Graph(id='graph-output-container',style={'margin-right': 'auto','margin-left': 'auto'})
                          )
-        ], style={'display': 'flex', 'flexDirection': 'row','margin-right': 'auto','margin-left': 'auto', 'justify-content': 'center'}
+        ], style={'display': 'flex', 'flexDirection': 'column','margin-right': 'auto','margin-left': 'auto', 'justify-content': 'center'}
     )
 ])
 
